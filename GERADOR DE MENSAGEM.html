@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gerador de Mensagem – Black Friday</title>
+<style>
+:root{--bg:#f1f3f6;--card:#fff;--tx:#161a20;--mut:#6b7280;--bd:#dde1e7;--in:#f7f8fa;--ac:#12a150;--ac2:#0b7a3b;--acx:#fff;--msg:#d9fdd3;--chat:#efeae2;--calc:#eef8f2;--hd1:#0f172a;--hd2:#1e293b;--sh:0 4px 18px rgba(15,23,42,.07);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1116;--card:#171b22;--tx:#e8eaed;--mut:#9aa1ac;--bd:#2a313b;--in:#10141a;--ac:#25c065;--ac2:#1ea455;--acx:#04200e;--msg:#005c4b;--chat:#0b141a;--calc:#14231b;--hd1:#020617;--hd2:#0f172a;--sh:none}}
+:root[data-theme="dark"]{--bg:#0e1116;--card:#171b22;--tx:#e8eaed;--mut:#9aa1ac;--bd:#2a313b;--in:#10141a;--ac:#25c065;--ac2:#1ea455;--acx:#04200e;--msg:#005c4b;--chat:#0b141a;--calc:#14231b;--hd1:#020617;--hd2:#0f172a;--sh:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+header{background:linear-gradient(135deg,var(--hd1),var(--hd2));color:#fff;padding:22px 16px}
+header div{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:1.25rem;margin:0}
+header p{margin:2px 0 0;font-size:.82rem;opacity:.7}
+.tag{margin-left:auto;background:#f59e0b;color:#1a1200;font-weight:700;font-size:.72rem;padding:5px 10px;border-radius:99px;letter-spacing:.04em}
+html,body{overflow-x:hidden}
+main{max-width:1000px;margin:0 auto;padding:18px 16px 28px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+main>*{min-width:0}
+@media(min-width:820px){main{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}}
+@media(min-width:820px) and (min-height:820px){.sticky{position:sticky;top:12px}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;box-shadow:var(--sh)}
+.sec{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:16px 0 2px}
+.sec:first-child{margin-top:0}
+label{display:block;font-size:.8rem;color:var(--mut);margin:10px 0 4px}
+input{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);font:inherit;transition:border-color .15s,box-shadow .15s}
+input:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 25%,transparent)}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.row>*,.mrow>*,.money{min-width:0}
+@media(max-width:340px){.row{grid-template-columns:minmax(0,1fr)}}
+.money{position:relative}
+.money span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:.9rem;pointer-events:none}
+.money input{padding-left:36px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{flex:0 0 auto;padding:6px 12px;border-radius:99px;border:1px solid var(--bd);background:var(--in);color:var(--tx);font-size:.82rem;font-weight:600;cursor:pointer}
+.chip.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.calc{background:var(--calc);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-top:16px;font-size:.88rem}
+.calc div{display:flex;justify-content:space-between;padding:3px 0}
+.calc .neg{color:#dc2626}
+.calc .tot{font-weight:700;border-top:1px dashed var(--bd);margin-top:5px;padding-top:8px}
+.calc .big{font-size:1.15rem;color:var(--ac2)}
+@media (prefers-color-scheme:dark){.calc .big{color:var(--ac)}}
+details{margin-top:14px;border:1px dashed var(--bd);border-radius:10px;padding:8px 12px}
+summary{cursor:pointer;font-size:.84rem;color:var(--mut)}
+.chat{background:var(--chat);border-radius:12px;padding:16px 12px}
+.bubble{position:relative;background:var(--msg);border-radius:10px 10px 10px 2px;padding:10px 12px 22px;font-size:.9rem;white-space:pre-wrap;word-break:break-word;color:#111;max-width:100%}
+@media (prefers-color-scheme:dark){.bubble{color:#e9edef}}
+.time{position:absolute;right:10px;bottom:5px;font-size:.68rem;opacity:.6;white-space:nowrap}
+.meta{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;font-size:.76rem;color:var(--mut);margin:8px 2px 0}
+.btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+button.btn{flex:1;min-width:140px;padding:12px;border:0;border-radius:10px;background:var(--ac);color:var(--acx);font:inherit;font-weight:700;cursor:pointer;transition:transform .1s,background .15s}
+button.btn:hover{background:var(--ac2);color:#fff}
+button.btn:active{transform:scale(.97)}
+button.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+button.btn.ghost:hover{background:var(--in);color:var(--tx)}
+small{color:var(--mut)}
+.full{grid-column:1/-1}
+.mrow{display:grid;grid-template-columns:112px minmax(0,1fr) 100px;gap:8px}
+@media(max-width:520px){.mrow{grid-template-columns:repeat(2,minmax(0,1fr))}.mrow input{order:3;grid-column:1/-1}}
+select{width:100%;padding:11px 10px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);font:inherit;cursor:pointer}
+select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 25%,transparent)}
+textarea{width:100%;min-height:260px;height:clamp(260px,55vh,520px);padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);font:inherit;font-size:.88rem;line-height:1.5;resize:vertical}
+textarea:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 25%,transparent)}
+.vars{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 10px}
+.var{padding:6px 10px;border-radius:8px;border:1px dashed var(--ac);background:var(--calc);color:var(--tx);font-size:.8rem;cursor:pointer}
+.var:hover{background:var(--ac);color:var(--acx)}
+.warn{font-size:.82rem;margin-top:8px;color:#d97706;min-height:1.2em}
+.hint{font-size:.82rem;color:var(--mut);margin:4px 0 0}
+@media(max-width:720px){input,select,textarea{font-size:16px}summary{padding:8px 0}.card{padding:14px}.var{padding:8px 10px}.btn{min-width:0!important}}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#111827;color:#fff;padding:10px 18px;border-radius:99px;font-size:.88rem;opacity:0;pointer-events:none;transition:.25s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<header><div>
+  <span style="font-size:1.8rem">📲</span>
+  <div style="display:block"><h1>Gerador de mensagem</h1><p>Ribeirão Shopping · Recompra e upgrade</p></div>
+  <span class="tag">BLACK FRIDAY</span>
+</div></header>
+
+<main>
+<section class="card">
+  <div class="sec">Atendimento</div>
+  <div class="row">
+    <div><label for="consultor">Nome do consultor</label><input id="consultor" value="Bruno" placeholder="Ex.: Bruno"></div>
+    <div><label for="nome">Nome do cliente</label><input id="nome" placeholder="Ex.: Carlos"></div>
+  </div>
+
+  <div class="sec">Aparelhos</div>
+  <label for="atual">Aparelho do cliente (recompra)</label>
+  <div class="mrow">
+    <select id="marcaAtual" aria-label="Marca do aparelho do cliente"><option value="">Marca</option><option>Samsung</option><option>Motorola</option><option>iPhone</option><option>Oppo</option><option>Vivo</option></select>
+    <input id="atual" placeholder="Modelo (ex.: 13)">
+    <select id="armAtual" aria-label="Armazenamento do aparelho do cliente"><option value="">Armaz.</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option></select>
+  </div>
+  <label for="novo">Aparelho a ser comprado</label>
+  <div class="mrow">
+    <select id="marcaNovo" aria-label="Marca do aparelho novo"><option value="">Marca</option><option>Samsung</option><option>Motorola</option><option>iPhone</option><option>Oppo</option><option>Vivo</option></select>
+    <input id="novo" placeholder="Modelo (ex.: 16 Pro)">
+    <select id="armNovo" aria-label="Armazenamento do aparelho novo"><option value="">Armaz.</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option></select>
+  </div>
+
+  <div class="sec">Valores</div>
+  <div class="row">
+    <div><label for="preco">Preço do aparelho novo</label><div class="money"><span>R$</span><input class="m" id="preco" inputmode="numeric" placeholder="0,00"></div></div>
+    <div><label for="desconto">Desconto Boost</label><div class="money"><span>R$</span><input class="m" id="desconto" inputmode="numeric" placeholder="0,00"></div></div>
+  </div>
+  <label for="recompra">Valor pago na recompra</label>
+  <div class="money"><span>R$</span><input class="m" id="recompra" inputmode="numeric" placeholder="0,00"></div>
+
+  <label for="parc">Parcelas sem juros</label>
+  <input id="parc" value="21" inputmode="numeric" maxlength="2">
+  <div class="chips" id="chips"></div>
+
+  <div class="calc">
+    <div><span>Preço do aparelho novo</span><span id="c1">R$ 0,00</span></div>
+    <div class="neg"><span>− Desconto Boost</span><span id="c2">R$ 0,00</span></div>
+    <div class="neg"><span>− Recompra</span><span id="c3">R$ 0,00</span></div>
+    <div class="tot big"><span>Valor final</span><span id="c4">R$ 0,00</span></div>
+    <div class="tot" style="border:0;margin:0;padding-top:2px"><span id="c5l">21x de</span><span id="c6">R$ 0,00</span></div>
+  </div>
+
+  <details>
+    <summary>Ajustes manuais (opcional)</summary>
+    <div class="row">
+      <div><label for="final">Valor final</label><div class="money"><span>R$</span><input class="m" id="final" inputmode="numeric" placeholder="automático"></div></div>
+      <div><label for="parcela">Valor da parcela</label><div class="money"><span>R$</span><input class="m" id="parcela" inputmode="numeric" placeholder="automático"></div></div>
+    </div>
+    <label for="tel">WhatsApp do cliente <small>(com DDD)</small></label>
+    <input id="tel" inputmode="tel" placeholder="16999999999">
+  </details>
+</section>
+
+<section class="sticky">
+  <div class="card">
+    <div class="sec">Prévia da mensagem</div>
+    <div class="chat"><div class="bubble"><span id="out"></span><span class="time" id="hora"></span></div></div>
+    <div class="meta"><span id="cnt"></span><span id="status"></span></div>
+    <div class="btns">
+      <button class="btn" id="copiar">📋 Copiar mensagem</button>
+      <button class="btn ghost" id="zap">Abrir no WhatsApp</button>
+      <button class="btn ghost" id="limpar" style="flex:0 0 100%">🧹 Novo cliente (limpar campos)</button>
+    </div>
+  </div>
+</section>
+
+<section class="card full">
+  <details id="edDet" style="margin:0;border:0;padding:0">
+    <summary style="font-weight:700;color:var(--tx);font-size:.95rem">✏️ Editar texto da mensagem</summary>
+    <p class="hint">Edite o texto livremente. Para inserir um dado automático, clique no botão correspondente: ele entra onde está o cursor. Não apague as partes entre chaves, como {NOME}.</p>
+    <div class="vars" id="vars"></div>
+    <textarea id="tpl" spellcheck="false"></textarea>
+    <div class="warn" id="tplwarn"></div>
+    <div class="btns">
+      <button class="btn ghost" id="tplReset">↩️ Voltar ao texto original</button>
+      <button class="btn ghost" id="tplCopy">Copiar modelo</button>
+    </div>
+    <p class="hint">O texto fica salvo neste aparelho. Se quiser compartilhar com outros consultores, use “Copiar modelo” e cole no campo acima do outro aparelho.</p>
+  </details>
+</section>
+</main>
+<div id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const ids = ["consultor","nome","marcaAtual","atual","armAtual","marcaNovo","novo","armNovo","preco","desconto","recompra","parc","final","parcela","tel"];
+
+/* ---------- utilidades ---------- */
+const num = s => {
+  s = (s||"").replace(/[^\d,.-]/g,"");
+  if (s.includes(",")) s = s.replace(/\./g,"").replace(",",".");
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+};
+const brl = n => n.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* máscara de moeda: digita 250000 e vira 2.500,00 */
+document.querySelectorAll("input.m").forEach(el => {
+  el.addEventListener("input", () => {
+    const d = el.value.replace(/\D/g,"");
+    el.value = d ? brl(parseInt(d,10)/100) : "";
+  });
+});
+
+/* nome do consultor lembrado neste aparelho */
+try { const s = localStorage.getItem("consultor"); if (s) $("consultor").value = s; } catch(e){}
+
+/* atalhos de parcelas */
+[6,10,12,18,21].forEach(n => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = n + "x"; b.dataset.n = n;
+  b.onclick = () => { $("parc").value = n; atualizar(); };
+  $("chips").appendChild(b);
+});
+
+/* ---------- cálculo ---------- */
+function calcular(){
+  const preco = num($("preco").value) || 0;
+  const desc = num($("desconto").value) || 0;
+  const rec = num($("recompra").value) || 0;
+  const n = Math.max(parseInt($("parc").value) || 21, 1);
+  const finManual = num($("final").value);
+  const parcManual = num($("parcela").value);
+  const tem = $("preco").value.trim() !== "" || finManual !== null;
+
+  let fin = Math.max(preco - desc - rec, 0);
+  if (finManual !== null) fin = finManual;
+  let parcela = fin / n;
+  if (parcManual !== null) parcela = parcManual;
+
+  $("c1").textContent = "R$ " + brl(preco);
+  $("c2").textContent = "R$ " + brl(desc);
+  $("c3").textContent = "R$ " + brl(rec);
+  $("c4").textContent = "R$ " + brl(fin);
+  $("c5l").textContent = n + "x de";
+  $("c6").textContent = "R$ " + brl(parcela);
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", +c.dataset.n === n));
+  return {fin: tem ? fin : null, parcela: tem ? parcela : null, n, tem, preco, desc, rec};
+}
+
+/* ---------- mensagem ---------- */
+/* ---------- modelo de texto editável ---------- */
+const DEFAULT_TPL = `🔥 {NOME} , PREPARE-SE PARA UM UPGRADE INCRÍVEL NESTA BLACK FRIDAY! 📱
+
+Boa tarde! Aqui é o {CONSULTOR}, Consultor  do Ribeirão Shopping.
+
+Você comprou seu {APARELHO_ATUAL} com a gente em 2023 e tenho uma oportunidade especial para você trocar pelo poderoso {APARELHO_NOVO}! 🚀
+
+Olha essa condição exclusiva:
+
+📱 {APARELHO_NOVO}
+💰 Valor final: R$ {VALOR_FINAL}
+💳 {PARCELAS}x de R$ {VALOR_PARCELA}
+🤩 E sabe o melhor? Esse valor já considera a compra do seu {APARELHO_ATUAL} como parte do negócio!
+
+⚠️ Oferta por tempo limitado, sujeita à avaliação do aparelho, que precisa estar sem defeitos.
+
+Gostou da oportunidade? Responda QUERO que eu te explico os detalhes e já te ajudo a garantir seu upgrade!
+
+Também tenho outras ofertas especiais de Black Friday para você!`;
+
+const VARS = [
+  ["Nome do cliente","{NOME}"],["Nome (como digitado)","{Nome}"],["Consultor","{CONSULTOR}"],
+  ["Aparelho do cliente","{APARELHO_ATUAL}"],["Aparelho novo","{APARELHO_NOVO}"],
+  ["Valor final","{VALOR_FINAL}"],["Nº de parcelas","{PARCELAS}"],["Valor da parcela","{VALOR_PARCELA}"],
+  ["Desconto Boost","{DESCONTO}"],["Recompra","{RECOMPRA}"],["Preço do novo","{PRECO}"]
+];
+const REQUIRED = ["{NOME}","{APARELHO_NOVO}","{VALOR_FINAL}","{PARCELAS}","{VALOR_PARCELA}"];
+
+let tpl = DEFAULT_TPL;
+try { const s = localStorage.getItem("tpl"); if (s) tpl = s; } catch(e){}
+
+/* monta "Marca Modelo Armazenamento" sem repetir a marca */
+function nomeAp(m, mod, arm, fallback){
+  const g = id => $(id).value.trim();
+  const modelo = g(mod);
+  if (!modelo) return fallback;
+  const marca = g(m);
+  const jaTem = marca && modelo.toLowerCase().startsWith(marca.toLowerCase());
+  return [marca && !jaTem ? marca : "", modelo, g(arm)].filter(Boolean).join(" ");
+}
+
+function montar(){
+  const v = id => $(id).value.trim();
+  const nome = v("nome") || "NOME DO CLIENTE";
+  const c = calcular();
+  const mapa = {
+    NOME: nome.toUpperCase(),
+    Nome: nome,
+    CONSULTOR: v("consultor") || "Bruno",
+    APARELHO_ATUAL: nomeAp("marcaAtual","atual","armAtual","MODELO DO APARELHO QUE O CLIENTE TEM"),
+    APARELHO_NOVO: nomeAp("marcaNovo","novo","armNovo","MODELO A SER COMPRADO"),
+    VALOR_FINAL: c.fin !== null ? brl(c.fin) : "",
+    PARCELAS: String(c.n),
+    VALOR_PARCELA: c.parcela !== null ? brl(c.parcela) : "",
+    DESCONTO: brl(c.desc),
+    RECOMPRA: brl(c.rec),
+    PRECO: brl(c.preco)
+  };
+  return tpl.replace(/\{(\w+)\}/g, (m, k) => (k in mapa ? mapa[k] : m));
+}
+
+function validarTpl(){
+  const falta = REQUIRED.filter(p => !tpl.includes(p));
+  $("tplwarn").textContent = falta.length
+    ? "⚠️ Dados obrigatórios que não estão no texto: " + falta.join(", ")
+    : "";
+}
+
+function atualizar(){
+  const t = montar(), c = calcular();
+  $("out").textContent = t;
+  $("hora").textContent = new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}) + " ✓✓";
+  $("cnt").textContent = t.length + " caracteres";
+  const falta = [];
+  if (!$("nome").value.trim()) falta.push("nome");
+  if (!$("atual").value.trim()) falta.push("aparelho do cliente");
+  if (!$("novo").value.trim()) falta.push("aparelho novo");
+  if (!c.tem) falta.push("preço");
+  $("status").textContent = falta.length ? "⚠️ Falta: " + falta.join(", ") : "✅ Pronta para enviar";
+  try { localStorage.setItem("consultor", $("consultor").value); } catch(e){}
+}
+ids.forEach(id => $(id).addEventListener("input", atualizar));
+
+/* ---------- ações ---------- */
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+$("copiar").onclick = async () => {
+  const t = montar();
+  try { await navigator.clipboard.writeText(t); }
+  catch(e){
+    const r = document.createRange(); r.selectNodeContents($("out"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    try{ document.execCommand("copy"); }catch(_){}
+  }
+  toast("Mensagem copiada ✓");
+};
+
+$("zap").onclick = () => {
+  let tel = $("tel").value.replace(/\D/g,"");
+  if (tel && !tel.startsWith("55")) tel = "55" + tel;
+  window.open("https://wa.me/" + tel + "?text=" + encodeURIComponent(montar()), "_blank");
+};
+
+$("limpar").onclick = () => {
+  ["nome","marcaAtual","atual","armAtual","marcaNovo","novo","armNovo","preco","desconto","recompra","final","parcela","tel"].forEach(id => $(id).value = "");
+  $("parc").value = 21;
+  atualizar(); toast("Campos limpos"); $("nome").focus();
+};
+
+/* editor do modelo */
+VARS.forEach(([rot, ph]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "var"; b.textContent = "+ " + rot; b.title = ph;
+  b.addEventListener("mousedown", e => e.preventDefault());
+  b.onclick = () => {
+    const t = $("tpl"), a = t.selectionStart, z = t.selectionEnd;
+    t.value = t.value.slice(0, a) + ph + t.value.slice(z);
+    t.focus(); t.selectionStart = t.selectionEnd = a + ph.length;
+    t.dispatchEvent(new Event("input"));
+  };
+  $("vars").appendChild(b);
+});
+$("tpl").value = tpl;
+$("tpl").addEventListener("input", () => {
+  tpl = $("tpl").value;
+  try { localStorage.setItem("tpl", tpl); } catch(e){}
+  validarTpl(); atualizar();
+});
+$("tplReset").onclick = () => {
+  tpl = DEFAULT_TPL; $("tpl").value = tpl;
+  try { localStorage.removeItem("tpl"); } catch(e){}
+  validarTpl(); atualizar(); toast("Texto original restaurado");
+};
+$("tplCopy").onclick = async () => {
+  try { await navigator.clipboard.writeText(tpl); toast("Modelo copiado ✓"); }
+  catch(e){ $("tpl").select(); try{ document.execCommand("copy"); toast("Modelo copiado ✓"); }catch(_){} }
+};
+validarTpl();
+atualizar();
+</script>
+</body>
+</html>
